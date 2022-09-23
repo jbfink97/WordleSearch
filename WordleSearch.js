@@ -12973,8 +12973,27 @@ zymic`
 
 window.addEventListener('load', () => {
 
+    // function getYellowLetters(yellowElement) {
+    //     yellowLetters = yellowElement.value.split('');
+    //     return yellowLetters;
+    // }
+
+    // function getGreyLetters(greyElement) {
+    //     greyLetters = greyElement.value.split('');
+    //     return greenLetters;
+    // }
+
+    // function getGreenLetters(greenElements) {
+    //     for (let i = 0; i < 5; i++) {
+    //         greenLetters[i] = greenElements[i].value;
+    //     }
+    //     return greenLetters;
+    // }
+
+
+
     // variable declarations
-    let wordList = importedList.split('\n');
+    let wordList = importedList.split('\n');;
     let yellowElement = document.getElementById('yellow');
     let greyElement = document.getElementById('grey');
     let greenElements = document.querySelectorAll('.greenLetter')
@@ -12990,14 +13009,9 @@ window.addEventListener('load', () => {
     // listener prevents two of the same letter being in the same text box
     // and prevents a letter from being in both the good and bad text boxes at the same time
     yellowElement.addEventListener('beforeinput', e => {
-        // loop over all green letter inputs and create an array for all values
-        for (let i = 0; i < 5; i++) {
-            greenLetters[i] = greenElements[i].value;
-        }
-        // create array for letters in yellow and grey tiles
-        // split after each letter to make an array that will be looped over
-        yellowLetters = yellowElement.value.split("");
-        greyLetters = greyElement.value.split("");
+        yellowLetters = yellowElement.value.split('');
+        greyLetters = greyElement.value.split('');
+        console.log(greyLetters);
         // If the letter the user is trying to type is already in the grey letters input,
         // give an error message and prevent it from being put in the yellow text box
         if (greyLetters.includes(e.data)) {
@@ -13013,12 +13027,10 @@ window.addEventListener('load', () => {
 
     // Do the same thing as above for grey tile text box
     greyElement.addEventListener('beforeinput', e => {
-        for (let j = 0; j < 5; j++) {
-            greenLetters[j] = greenElements[j].value;
-        }
-        yellowLetters = yellowElement.value.split("");
-        greyLetters = greyElement.value.split("");
-        if (yellowLetters.includes(e.data)) {
+        yellowLetters = yellowElement.value.split('');
+        greyLetters = greyElement.value.split('');
+        console.log(greyLetters);
+        if (yellowLetters.includes(e.data) || greenLetters.includes(e.data)) {
             e.preventDefault();
             errorMessage.textContent = "Letter cannot be good and bad at the same time";
         } else if (greyLetters.includes(e.data)) {
@@ -13033,8 +13045,7 @@ window.addEventListener('load', () => {
     // However, forEach must be used since there is > 1 element
     greenElements.forEach(letterBox => {
         letterBox.addEventListener('beforeinput', e => {
-            yellowLetters = yellowElement.value.split("");
-            greyLetters = greyElement.value.split("");
+            greyLetters = greyElement.value.split('');
             if (greyLetters.includes(e.data)) {
                 e.preventDefault();
             errorMessage.textContent = "Letter cannot be good and bad at the same time";
@@ -13043,6 +13054,90 @@ window.addEventListener('load', () => {
             }
         })
     })
+
+    searchBtn.addEventListener('click', () => {
+        // Split word list at new line to create array of possible words rather than
+        // one long string
+        wordList = importedList.split('\n');
+        for (let i = 0; i < 5; i++) {
+            greenLetters[i] = greenElements[i].value;
+        }
+        yellowLetters = yellowElement.value.split("");
+        greyLetters = greyElement.value.split("");
+        // Loop over each word in wordList
+        for (let j = 0; j < wordList.length; j++) {
+            // Loop over each letter in each word in wordList (5 letters per word)
+            for (let k = 0; k < 5; k++) {
+                // Loop over all the greenLetters array and remove words that do not have
+                // a green letter in the same spot
+                for (let l = 0; l < greenLetters.length; l++) {
+                    // If no letters in current green letter box, move to next letter box
+                    if (greenLetters[l] == "" || l != k) {
+                        continue;
+                    } else if (wordList[j][k] != greenLetters[l]) {
+                        // remove word for wordList if its letter does not match a green letter
+                        wordList.splice(j, 1);
+                        // setting skip to 1 will allow us to skip the remaining letters after
+                        // exiting this loop
+                        skip = 1;
+                        // must decrement i because we removed a word. If not, the next word
+                        // in the list would be skipped
+                        j--;
+                        break;
+                    }
+                }
+                // This will skip the remaining letters of the word we just removed and 
+                // move on to the next word in wordList
+                if (skip == 1) {
+                    skip = 0;
+                    break;
+                }
+
+                // Remove current word from wordList if it contains a grey letter
+                for (let m = 0; m < greyLetters.length; m++) {
+                    currentLetter = greyLetters[m];
+                    if (wordList[j].includes(currentLetter)) {
+                        wordList.splice(j,1);
+                        skip = 1;
+                        j--;
+                        break;
+                    }
+                }
+                if (skip == 1) {
+                    skip = 0;
+                    break;
+                }
+
+                // Remove current word from wordList if it does not contain yellow letter
+                for (let n = 0; n < yellowLetters.length; n++) {
+                    currentLetter = yellowLetters[n];
+                    if (wordList[j].includes(currentLetter) == false) {
+                        wordList.splice(j,1);
+                        skip = 1;
+                        j--;
+                        break;
+                    }
+                }
+                if (skip == 1) {
+                    skip = 0;
+                    break;
+                }
+            }
+        }
+    
+    // Remove current remaing word list elements
+    while (remainingWords.firstChild) {
+        remainingWords.removeChild(remainingWords.firstChild);
+    }
+
+    // Add new remaining word list elements
+    for (let o = 0; o < wordList.length; o++) {
+        const possibleWord = document.createElement('div');
+        possibleWord.classList.add('possibleWord');
+        possibleWord.textContent = wordList[o];
+        remainingWords.append(possibleWord);
+    }
+})
 
 
 
