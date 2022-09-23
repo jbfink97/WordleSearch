@@ -13,7 +13,7 @@ header{
 }
 
 .container{
-    padding: 15vh;
+    padding: 10vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,5 +26,45 @@ header{
     display: flex;
     flex-direction: column;
     align-content: space-around;
-    
+}
+
+.letter{
+    border: 2px solid #d3d6da;
+    height: 62px;
+    width: 62px;
+    text-align: center;
+    font-size: 40px;
+}
+
+.search{
+    border: 2px solid black;
+    border-radius: 5px;
+    height: 4vh;
+    width: 7vw;
+    cursor: pointer;
+}
+
+.remaining{
+    padding: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    max-width: 500px;
+}
+
+.item.letterBoxes{
+    flex-direction: row;
+}
+
+#grey,
+#yellow{
+    width: 15vw;
+    height: 3vh;
+    font-size: 2vh;
+}
+
+.possibleWord{
+    font-size: small;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 7px;
+    border: 1px solid #d3d6da;
 }
