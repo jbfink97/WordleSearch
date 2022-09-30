@@ -12973,22 +12973,32 @@ zymic`
 
 window.addEventListener('load', () => {
 
-    // function getYellowLetters(yellowElement) {
-    //     yellowLetters = yellowElement.value.split('');
-    //     return yellowLetters;
-    // }
+    function getYellowLetters() {
+        yellowLetters = yellowElement.value.split('');
+        return yellowLetters;
+    }
 
-    // function getGreyLetters(greyElement) {
-    //     greyLetters = greyElement.value.split('');
-    //     return greenLetters;
-    // }
+    function getGreyLetters() {
+        greyLetters = greyElement.value.split('');
+        return greyLetters;
+    }
 
-    // function getGreenLetters(greenElements) {
-    //     for (let i = 0; i < 5; i++) {
-    //         greenLetters[i] = greenElements[i].value;
-    //     }
-    //     return greenLetters;
-    // }
+    function getGreenLetters() {
+        for (let i = 0; i < 5; i++) {
+            greenLetters[i] = greenElements[i].value;
+        }
+        return greenLetters;
+    }
+
+    function isUpperCase(e) {
+        if (typeof e == 'string') {
+            if (e.toUpperCase() === e) {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
 
 
 
@@ -13009,12 +13019,16 @@ window.addEventListener('load', () => {
     // listener prevents two of the same letter being in the same text box
     // and prevents a letter from being in both the good and bad text boxes at the same time
     yellowElement.addEventListener('beforeinput', e => {
-        yellowLetters = yellowElement.value.split('');
-        greyLetters = greyElement.value.split('');
-        console.log(greyLetters);
+        //yellowLetters = yellowElement.value.split('');
+        yellowLetters = getYellowLetters();
+        greyLetters = getGreyLetters();
+        if (isUpperCase(e.data)) {
+            e.preventDefault();
+            errorMessage.textContent = "Only input lowercase letters, no capitals or numbers";
+        }
         // If the letter the user is trying to type is already in the grey letters input,
         // give an error message and prevent it from being put in the yellow text box
-        if (greyLetters.includes(e.data)) {
+        else if (greyLetters.includes(e.data)) {
             e.preventDefault();
             errorMessage.textContent = "Letter cannot be good and bad at the same time";
         } else if (yellowLetters.includes(e.data)) {
@@ -13027,10 +13041,13 @@ window.addEventListener('load', () => {
 
     // Do the same thing as above for grey tile text box
     greyElement.addEventListener('beforeinput', e => {
-        yellowLetters = yellowElement.value.split('');
-        greyLetters = greyElement.value.split('');
-        console.log(greyLetters);
-        if (yellowLetters.includes(e.data) || greenLetters.includes(e.data)) {
+        yellowLetters = getYellowLetters();
+        greyLetters = getGreyLetters();
+        greenLetters = getGreenLetters();
+        if (isUpperCase(e.data)) {
+            e.preventDefault();
+            errorMessage.textContent = "Only input lowercase letters, no capitals or numbers";
+        } else if (yellowLetters.includes(e.data) || greenLetters.includes(e.data)) {
             e.preventDefault();
             errorMessage.textContent = "Letter cannot be good and bad at the same time";
         } else if (greyLetters.includes(e.data)) {
@@ -13045,10 +13062,13 @@ window.addEventListener('load', () => {
     // However, forEach must be used since there is > 1 element
     greenElements.forEach(letterBox => {
         letterBox.addEventListener('beforeinput', e => {
-            greyLetters = greyElement.value.split('');
-            if (greyLetters.includes(e.data)) {
+            greyLetters = getGreyLetters();
+            if (isUpperCase(e.data)) {
                 e.preventDefault();
-            errorMessage.textContent = "Letter cannot be good and bad at the same time";
+                errorMessage.textContent = "Only input lowercase letters, no capitals or numbers";
+            } else if (greyLetters.includes(e.data)) {
+                e.preventDefault();
+                errorMessage.textContent = "Letter cannot be good and bad at the same time";
             } else {
                 errorMessage.textContent = "";
             }
@@ -13058,12 +13078,13 @@ window.addEventListener('load', () => {
     searchBtn.addEventListener('click', () => {
         // Split word list at new line to create array of possible words rather than
         // one long string
+        // Re-defining the variable on each click makes sure the search iterates over the entire
+        // list again. In case the user deleted or changed anything in the text boxes.
         wordList = importedList.split('\n');
-        for (let i = 0; i < 5; i++) {
-            greenLetters[i] = greenElements[i].value;
-        }
-        yellowLetters = yellowElement.value.split("");
-        greyLetters = greyElement.value.split("");
+        greyLetters = getGreyLetters();
+        greenLetters = getGreenLetters();
+        yellowLetters = getYellowLetters();
+        
         // Loop over each word in wordList
         for (let j = 0; j < wordList.length; j++) {
             // Loop over each letter in each word in wordList (5 letters per word)
@@ -13097,7 +13118,7 @@ window.addEventListener('load', () => {
                 for (let m = 0; m < greyLetters.length; m++) {
                     currentLetter = greyLetters[m];
                     if (wordList[j].includes(currentLetter)) {
-                        wordList.splice(j,1);
+                        wordList.splice(j, 1);
                         skip = 1;
                         j--;
                         break;
@@ -13112,7 +13133,7 @@ window.addEventListener('load', () => {
                 for (let n = 0; n < yellowLetters.length; n++) {
                     currentLetter = yellowLetters[n];
                     if (wordList[j].includes(currentLetter) == false) {
-                        wordList.splice(j,1);
+                        wordList.splice(j, 1);
                         skip = 1;
                         j--;
                         break;
@@ -13124,20 +13145,20 @@ window.addEventListener('load', () => {
                 }
             }
         }
-    
-    // Remove current remaing word list elements
-    while (remainingWords.firstChild) {
-        remainingWords.removeChild(remainingWords.firstChild);
-    }
 
-    // Add new remaining word list elements
-    for (let o = 0; o < wordList.length; o++) {
-        const possibleWord = document.createElement('div');
-        possibleWord.classList.add('possibleWord');
-        possibleWord.textContent = wordList[o];
-        remainingWords.append(possibleWord);
-    }
-})
+        // Remove current remaing word list elements
+        while (remainingWords.firstChild) {
+            remainingWords.removeChild(remainingWords.firstChild);
+        }
+
+        // Add new remaining word list elements
+        for (let o = 0; o < wordList.length; o++) {
+            const possibleWord = document.createElement('div');
+            possibleWord.classList.add('possibleWord');
+            possibleWord.textContent = wordList[o];
+            remainingWords.append(possibleWord);
+        }
+    })
 
 
 

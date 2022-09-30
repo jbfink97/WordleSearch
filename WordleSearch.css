@@ -68,3 +68,7 @@ header{
     padding: 7px;
     border: 1px solid #d3d6da;
 }
+
+input{
+    text-transform: lowercase;
+}
