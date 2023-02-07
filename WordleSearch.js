@@ -13030,7 +13030,7 @@ window.addEventListener('load', () => {
         // give an error message and prevent it from being put in the yellow text box
         else if (greyLetters.includes(e.data)) {
             e.preventDefault();
-            errorMessage.textContent = "Letter cannot be good and bad at the same time";
+            errorMessage.textContent = "Letters cannot be grey and yellow/green at the same time";
         } else if (yellowLetters.includes(e.data)) {
             e.preventDefault();
             errorMessage.textContent = "Don't repeat letters please";
@@ -13049,7 +13049,7 @@ window.addEventListener('load', () => {
             errorMessage.textContent = "Only input lowercase letters, no capitals or numbers";
         } else if (yellowLetters.includes(e.data) || greenLetters.includes(e.data)) {
             e.preventDefault();
-            errorMessage.textContent = "Letter cannot be good and bad at the same time";
+            errorMessage.textContent = "Letters cannot be grey and yellow/green at the same time";
         } else if (greyLetters.includes(e.data)) {
             e.preventDefault();
             errorMessage.textContent = "Don't repeat letters please";
@@ -13068,7 +13068,7 @@ window.addEventListener('load', () => {
                 errorMessage.textContent = "Only input lowercase letters, no capitals or numbers";
             } else if (greyLetters.includes(e.data)) {
                 e.preventDefault();
-                errorMessage.textContent = "Letter cannot be good and bad at the same time";
+                errorMessage.textContent = "Letters cannot be grey and yellow/green at the same time";
             } else {
                 errorMessage.textContent = "";
             }
