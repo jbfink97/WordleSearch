@@ -53,6 +53,7 @@ header{
 
 .item.letterBoxes{
     flex-direction: row;
+    max-width: 90vw;
 }
 
 #grey,
