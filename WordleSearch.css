@@ -40,7 +40,7 @@ header{
     border: 2px solid black;
     border-radius: 5px;
     height: 4vh;
-    width: 7vw;
+    min-width: 7vw;
     cursor: pointer;
 }
 
@@ -48,7 +48,7 @@ header{
     padding: 25px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    max-width: 500px;
+    max-width: 90vw;
 }
 
 .item.letterBoxes{
