@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link href="style.css" rel="stylesheet"> -->
+    <script src="bundle.js" defer></script>
+    <title>Wordle Search</title>
+</head>
+<body>
+    <header>
+        <h1>Wordle Search</h1>
+    </header>
+    <main class="container">
+        <div class="item">
+            <label>Yellow tiles:</label>
+            <input type="text" id="yellow"><br><br>
+        </div>
+        <div class="item">
+            <label>Grey tiles:</label>
+            <input type="text" id="grey"><br><br>
+        </div>
+        <div class="item">Green tiles</div>
+        <div class="item letterBoxes">
+            <input maxlength="1" class="greenLetter">
+            <input maxlength="1" class="greenLetter">
+            <input maxlength="1" class="greenLetter">
+            <input maxlength="1" class="greenLetter">
+            <input maxlength="1" class="greenLetter">
+        </div>
+        <div class="item">
+            <input class="search" type="submit" value="search">
+        </div>
+        <div class="item error"></div>
+        <div class="remaining"></div>
+    </main>
+    
+</body>
+</html>
